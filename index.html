@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latest Release Page</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    /* This section replaces your separate styles.css file */
+    
+    .header-container {
+      display: flex;         /* Moves items side-by-side */
+      align-items: center;   /* Centers them vertically */
+      gap: 40px;            /* Adds space between the image and text */
+    }
+
+    .header-container img {
+      max-width: 50%;       /* Ensures the image doesn't take over the whole screen */
+      height: auto;
+    }
+
+    .text-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      margin-top: -130px;
+    }
+
+    .big-right-text {
+      font-size: 60px;
+      margin: 0;
+      text-align: left;
+      font-family: 'Golos Text', sans-serif;
+    }
+
+    .zine-title {
+      font-size: 150px;
+      line-height: 1;
+      position: relative;
+      top: -20px;
+    }
+
+    a:has(.zine-title) {
+      text-decoration: none;
+      color: inherit;
+      display: inline-block;
+      line-height: 1;
+      height: fit-content;
+    }
+
+    a:has(.zine-title):hover {
+      text-decoration: underline;
+    }
+
+    a:has(.newsletter-title) {
+      text-decoration: none;
+      color: inherit;
+      display: inline-block;
+    }
+
+  </style>
+</head>
+<body>
+
+  <div class="header-container">
+    <img src="Images/homepage1.png" alt="cute drawing" width="1000">
+
+    <div class="text-stack">
+      <img src="Images/latestrelease.png" alt="latest release" style="height: auto; width: auto;" />
+      <a href="zine.html"><h2 class="big-right-text zine-title">ZINE #1</h2></a>
+      <a href="newsletter.html"><img src="Images/newsletter.png" alt="newsletter" class="newsletter-title" style="height: auto; width: 200px;" /></a>
+      <a href="issues.html"><img src="Images/issuesbutton.png" alt="issues" style="height: auto; width: 150px;" /></a>
+    </div>
+  </div>
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 10px; margin-top: 100px;">
+    <img src="Images/mellowlogo.png" width="800">
+    <img src="Images/description.png" width="800" style="margin-top: -80px;">
+    <img src="Images/realimage.JPG" width="1200" style="margin-top: 40px;">
+  </div>
+
+</body>
+</html>

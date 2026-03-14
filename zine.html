@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zine — Mellow Magazine</title>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #ffffff;
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      font-family: 'Golos Text', sans-serif;
+      cursor: grab;
+    }
+
+    body.dragging { cursor: grabbing; }
+
+    /* Back link */
+    .back {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.75rem;
+      font-size: 30px;
+      font-family: 'Golos Text', sans-serif;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #0a0a0a;
+      text-decoration: none;
+      line-height: 1;
+      z-index: 100;
+    }
+    .back:hover { text-decoration: underline; }
+
+    /* Drag hint */
+    .hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #f4f1ec;
+      opacity: 0.3;
+      z-index: 100;
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
+    .hint.hidden { opacity: 0; }
+
+    /* Progress bar — horizontal at bottom */
+    .progress {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 2px;
+      background: rgba(244, 241, 236, 0.15);
+      z-index: 100;
+      border-radius: 2px;
+    }
+    .progress-thumb {
+      height: 100%;
+      background: rgba(244, 241, 236, 0.6);
+      border-radius: 2px;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    /* Image container — padded to create white borders top/bottom */
+    .canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 60px 0;
+    }
+
+    .canvas img {
+      height: 100%;
+      width: auto;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <a href="index.html" class="back">Back</a>
+
+  <div class="progress">
+    <div class="progress-thumb" id="thumb"></div>
+  </div>
+
+  <span class="hint" id="hint">drag to explore</span>
+
+  <div class="canvas" id="canvas">
+    <img src="Images/zine1test.jpg" alt="Mellow Zine #1" />
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const thumb  = document.getElementById('thumb');
+    const hint   = document.getElementById('hint');
+
+    let x = 0;
+    let startX = 0;
+    let startOffset = 0;
+    let isDragging = false;
+    let maxScroll = 0;
+    let hintTimer;
+
+    function getMaxScroll() {
+      return Math.max(0, canvas.scrollWidth - window.innerWidth);
+    }
+
+    function clamp(val, min, max) {
+      return Math.min(Math.max(val, min), max);
+    }
+
+    function applyX(newX) {
+      x = clamp(newX, -maxScroll, 0);
+      canvas.style.transform = `translateX(${x}px)`;
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const pct = maxScroll > 0 ? Math.abs(x) / maxScroll : 0;
+      const trackW = 120;
+      const thumbW = Math.max(16, trackW * (window.innerWidth / canvas.scrollWidth));
+      const thumbLeft = pct * (trackW - thumbW);
+      thumb.style.width = thumbW + 'px';
+      thumb.style.left  = thumbLeft + 'px';
+    }
+
+    document.addEventListener('mousedown', e => {
+      isDragging = true;
+      startX = e.clientX;
+      startOffset = x;
+      document.body.classList.add('dragging');
+      clearTimeout(hintTimer);
+      hint.classList.add('hidden');
+    });
+
+    document.addEventListener('mousemove', e => {
+      if (!isDragging) return;
+      const delta = e.clientX - startX;
+      applyX(startOffset + delta);
+    });
+
+    document.addEventListener('mouseup', () => {
+      isDragging = false;
+      document.body.classList.remove('dragging');
+    });
+
+
+    document.addEventListener('touchstart', e => {
+      startX = e.touches[0].clientX;
+      startOffset = x;
+      hint.classList.add('hidden');
+    }, { passive: true });
+
+    document.addEventListener('touchmove', e => {
+      const delta = e.touches[0].clientX - startX;
+      applyX(startOffset + delta);
+    }, { passive: true });
+
+ 
+    document.addEventListener('wheel', e => {
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      applyX(x - delta);
+      hint.classList.add('hidden');
+    }, { passive: true });
+
+    function recalc() {
+      maxScroll = getMaxScroll();
+      applyX(x);
+    }
+
+    window.addEventListener('resize', recalc);
+
+    const img = canvas.querySelector('img');
+    if (img) img.addEventListener('load', recalc);
+
+    recalc();
+
+    hintTimer = setTimeout(() => hint.classList.add('hidden'), 3000);
+  </script>
+
+</body>
+</html>
