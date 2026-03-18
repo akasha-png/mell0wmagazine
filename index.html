@@ -52,15 +52,24 @@
       position: absolute;
       top: 44%;
       left: calc(50% + 0.6vw);
-      transform: translateX(-5%);
-      width: 40.6vw;
+      transform: translateX(5%);
+      width: 33vw;
       height: auto;
       transition: transform 0.2s ease, scale 0.2s ease;
       cursor: pointer;
     }
 
     .zine-overlay:hover {
-      transform: translateX(-5%) scale(1.05);
+      transform: translateX(5%) scale(1.05);
+    }
+
+    .releasedate-overlay {
+      position: absolute;
+      top: 65%;
+      left: calc(50% + 0.6vw);
+      transform: translateX(30%);
+      width: 25vw;
+      height: auto;
     }
 
     .page2-wrapper {
@@ -71,7 +80,7 @@
 
     .issueselect-overlay {
       position: absolute;
-      top: 15%;
+      top: calc(25%);
       left: 67%;
       transform: translateX(-50%);
       width: 30vw;
@@ -134,13 +143,17 @@
     <img class="fullscreen" src="Images/page1.jpg" alt="">
     <img class="logo-overlay" src="Images/mellowlogo2.png" alt="Mellow Logo">
     <img class="latestrelease-overlay" src="Images/latestrelease6.png" alt="Latest Release">
-    <img class="zine-overlay" src="Images/zine1.png" alt="Zine 1">
+    <img class="zine-overlay" src="Images/homequestion.png" alt="Zine 1">
+    <img class="releasedate-overlay" src="Images/releasedate.png" alt="Release Date">
   </div>
   <div class="page2-wrapper">
     <img class="fullscreen" src="Images/Page2.JPG" alt="">
-    <img class="issueselect-overlay" src="Images/issueselect.png" alt="Issues">
-    <img class="newsletterselect-overlay" src="Images/newsletterselect.png" alt="Newsletter">
-    <img class="zineselect-overlay" src="Images/zineselect.png" alt="Zine">
+    <!-- hidden: <img class="issueselect-overlay" src="Images/issueselect.png" alt="Issues"> -->
+    <!-- hidden: <img class="newsletterselect-overlay" src="Images/newsletterselect.png" alt="Newsletter"> -->
+    <!-- hidden: <img class="zineselect-overlay" src="Images/zineselect.png" alt="Zine"> -->
+    <img class="issueselect-overlay" src="Images/homepagequestion.png" alt="Issues">
+    <img class="newsletterselect-overlay" src="Images/homepagequestion.png" alt="Newsletter">
+    <img class="zineselect-overlay" src="Images/homepagequestion.png" alt="Zine">
   </div>
   <img class="fullscreen" src="Images/page3.jpg" alt="">
 
