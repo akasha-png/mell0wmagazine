@@ -3,293 +3,184 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Issue #1 — Mellow</title>
-  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
+  <title>Mellow #1</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    html, body {
-      width: 100%; height: 100%;
-      overflow: hidden;
+    body {
       background: #fff;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow: hidden;
     }
 
-    /* ── Spread container ── */
-    #spread {
+    .carousel {
       position: relative;
-      width: 80vw;
-      height: 80vh;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
-      perspective: 3000px;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease;
     }
 
-    /* Left and right halves */
-    .half {
-      position: relative;
-      width: 50%;
-      height: 100%;
-      overflow: hidden;
-    }
-
-    .half img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .slide img {
+      max-height: 90vh;
+      max-width: 90vw;
+      width: auto;
+      height: auto;
       display: block;
-      user-select: none;
-      pointer-events: none;
+      object-fit: contain;
     }
 
-    /* The flipping panel (right flips forward, left flips back) */
-    #flip-panel {
-      position: absolute;
-      top: 0;
-      width: 50%;
-      height: 100%;
-      transform-style: preserve-3d;
-      pointer-events: none;
-      z-index: 10;
-    }
-
-    #flip-panel.flip-right {
-      left: 50%;
-      transform-origin: left center;
-    }
-
-    #flip-panel.flip-left {
-      left: 0;
-      transform-origin: right center;
-    }
-
-    .flip-face {
-      position: absolute;
-      inset: 0;
-      backface-visibility: hidden;
-      overflow: hidden;
-    }
-
-    .flip-face img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .flip-face-back {
-      transform: rotateY(180deg);
-    }
-
-    /* Centre spine line */
-    #spine {
-      position: absolute;
-      left: 50%;
-      top: 0;
-      width: 1px;
-      height: 100%;
-      background: rgba(0,0,0,0.08);
-      z-index: 5;
-      pointer-events: none;
-    }
-
-    /* ── Arrows ── */
     .arrow {
       position: fixed;
       top: 50%;
       transform: translateY(-50%);
       background: none;
       border: none;
-      font-size: 36px;
+      font-size: 2.5rem;
       cursor: pointer;
-      color: #0a0a0a;
-      z-index: 100;
-      padding: 16px;
-      opacity: 0.35;
+      color: #111;
+      padding: 10px 20px;
+      user-select: none;
+      z-index: 10;
+      opacity: 0.5;
       transition: opacity 0.2s;
-      line-height: 1;
     }
-    .arrow:hover { opacity: 1; }
-    .arrow:disabled { opacity: 0.08; cursor: default; }
-    #prev { left: 12px; }
-    #next { right: 12px; }
 
-    /* ── Counter ── */
-    .counter {
+    .arrow:hover { opacity: 1; }
+    .arrow-left { left: 20px; }
+    .arrow-right { right: 20px; }
+
+    .page-counter {
       position: fixed;
-      bottom: 1rem;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 13px;
       font-family: 'Golos Text', sans-serif;
-      color: rgba(0,0,0,0.4);
-      z-index: 100;
+      font-size: 14px;
+      color: #555;
     }
 
-    /* ── Back ── */
     .back {
       position: fixed;
-      bottom: 1rem;
-      right: 1.5rem;
-      font-size: 24px;
+      bottom: 20px;
+      right: 30px;
       font-family: 'Golos Text', sans-serif;
-      font-weight: bold;
-      text-transform: uppercase;
-      color: #0a0a0a;
+      font-size: 14px;
+      color: #111;
       text-decoration: none;
-      z-index: 100;
-      opacity: 0.5;
     }
-    .back:hover { opacity: 1; text-decoration: underline; }
+
+    .back:hover { text-decoration: underline; }
   </style>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div id="spread">
-    <!-- Left page (static) -->
-    <div class="half" id="left-half">
-      <img id="img-left" src="" alt="">
-    </div>
-
-    <!-- Right page (static) -->
-    <div class="half" id="right-half">
-      <img id="img-right" src="" alt="">
-    </div>
-
-    <!-- Flipping panel (dynamically positioned) -->
-    <div id="flip-panel">
-      <div class="flip-face" id="flip-front">
-        <img id="img-flip-front" src="" alt="">
-      </div>
-      <div class="flip-face flip-face-back" id="flip-back-face">
-        <img id="img-flip-back" src="" alt="">
-      </div>
-    </div>
-
-    <div id="spine"></div>
+  <div class="carousel" id="carousel">
+    <div class="slide" id="slide-current"><img id="img-current" src="" alt=""></div>
+    <div class="slide" id="slide-next" style="transform: translateX(100%)"><img id="img-next" src="" alt=""></div>
   </div>
 
-  <button class="arrow" id="prev">&#8592;</button>
-  <button class="arrow" id="next">&#8594;</button>
-  <div class="counter" id="counter"></div>
-  <a href="../issues.html" class="back">Back</a>
+  <button class="arrow arrow-left" onclick="prev()">&#8592;</button>
+  <button class="arrow arrow-right" onclick="next()">&#8594;</button>
+  <div class="page-counter" id="counter"></div>
+  <a href="../index.html" class="back">Back</a>
 
   <script>
-    const pages = Array.from({ length: 26 }, (_, i) =>
-      `../Images/magazine1/magazinedemo${i + 1}.jpg`
-    );
+    const pages = [
+      '../Images/magazine1demo/MELLOW ISSUE 1.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 12.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 13.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 14.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 15.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 16.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 17.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 18.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 19.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 110.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 111.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 112.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 113.jpg',
+      '../Images/magazine1demo/MELLOW ISSUE 114.jpg',
+    ];
 
-    const spreads = [];
-    spreads.push([null, 0]); // cover (page 1) alone on the right
-    for (let i = 1; i < pages.length; i += 2) {
-      spreads.push([i, i + 1 < pages.length ? i + 1 : null]);
-    }
-
-    let spread = 0;
+    let current = 0;
     let animating = false;
 
-    const imgLeft      = document.getElementById('img-left');
-    const imgRight     = document.getElementById('img-right');
-    const flipPanel    = document.getElementById('flip-panel');
-    const imgFlipFront = document.getElementById('img-flip-front');
-    const imgFlipBack  = document.getElementById('img-flip-back');
-    const prevBtn      = document.getElementById('prev');
-    const nextBtn      = document.getElementById('next');
-    const counter      = document.getElementById('counter');
+    const slideCurrent = document.getElementById('slide-current');
+    const slideNext = document.getElementById('slide-next');
+    const imgCurrent = document.getElementById('img-current');
+    const imgNext = document.getElementById('img-next');
+    const counter = document.getElementById('counter');
 
-    function src(pageIndex) {
-      return pageIndex == null ? '' : pages[pageIndex];
+    function updateCounter() {
+      counter.textContent = `${current + 1} / ${pages.length}`;
     }
 
-    function showSpread(s) {
-      const [l, r] = spreads[s];
-      imgLeft.src  = src(l);
-      imgRight.src = src(r);
-      updateUI(s);
-    }
+    function animate(direction) {
+      // direction: 1 = forward (slide left), -1 = backward (slide right)
+      const exitTo = direction === 1 ? '-100%' : '100%';
+      const enterFrom = direction === 1 ? '100%' : '-100%';
 
-    function updateUI(s) {
-      const total = spreads.length;
-      counter.textContent = `${s + 1} / ${total}`;
-      prevBtn.disabled = s === 0;
-      nextBtn.disabled = s === spreads.length - 1;
-    }
+      slideNext.style.transition = 'none';
+      slideNext.style.transform = `translateX(${enterFrom})`;
 
-    function flipTo(targetSpread) {
-      if (animating) return;
-      if (targetSpread < 0 || targetSpread >= spreads.length) return;
-      animating = true;
-
-      const forward = targetSpread > spread;
-      const cur = spreads[spread];
-      const nxt = spreads[targetSpread];
-
-      if (forward) {
-        // Right page flips to the left
-        flipPanel.className = 'flip-right';
-        flipPanel.style.left = '50%';
-        flipPanel.style.transformOrigin = 'left center';
-
-        imgFlipFront.src = src(cur[1]); // current right page (front of flipping leaf)
-        imgFlipBack.src  = src(nxt[0]); // next left page (back of flipping leaf)
-
-        // Pre-show next right page beneath
-        imgLeft.src  = src(cur[0]);
-        imgRight.src = src(nxt[1]);
-
-        animate('rotateY(0deg)', 'rotateY(-180deg)', () => {
-          spread = targetSpread;
-          showSpread(spread);
-          animating = false;
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          slideCurrent.style.transition = 'transform 0.4s ease';
+          slideNext.style.transition = 'transform 0.4s ease';
+          slideCurrent.style.transform = `translateX(${exitTo})`;
+          slideNext.style.transform = 'translateX(0)';
         });
+      });
 
-      } else {
-        // Left page flips to the right
-        flipPanel.className = 'flip-left';
-        flipPanel.style.left = '0';
-        flipPanel.style.transformOrigin = 'right center';
-
-        imgFlipFront.src = src(cur[0]); // current left page (front of flipping leaf)
-        imgFlipBack.src  = src(nxt[1]); // prev right page (back of flipping leaf)
-
-        imgLeft.src  = src(nxt[0]);
-        imgRight.src = src(cur[1]);
-
-        animate('rotateY(0deg)', 'rotateY(180deg)', () => {
-          spread = targetSpread;
-          showSpread(spread);
-          animating = false;
-        });
-      }
-    }
-
-    function animate(from, to, done) {
-      flipPanel.style.transition = 'none';
-      flipPanel.style.transform  = from;
-      flipPanel.style.display    = 'block';
-      flipPanel.offsetHeight; // reflow
-
-      flipPanel.style.transition = 'transform 0.55s cubic-bezier(0.645, 0.045, 0.355, 1.000)';
-      flipPanel.style.transform  = to;
-
-      flipPanel.addEventListener('transitionend', function h() {
-        flipPanel.removeEventListener('transitionend', h);
-        flipPanel.style.transition = 'none';
-        flipPanel.style.transform  = 'rotateY(0deg)';
-        flipPanel.style.display    = 'none';
-        done();
+      slideNext.addEventListener('transitionend', function onDone() {
+        slideNext.removeEventListener('transitionend', onDone);
+        imgCurrent.src = pages[current];
+        slideCurrent.style.transition = 'none';
+        slideCurrent.style.transform = 'translateX(0)';
+        animating = false;
       });
     }
 
-    nextBtn.addEventListener('click', () => flipTo(spread + 1));
-    prevBtn.addEventListener('click', () => flipTo(spread - 1));
+    function next() {
+      if (animating || current >= pages.length - 1) return;
+      animating = true;
+      current++;
+      imgNext.src = pages[current];
+      updateCounter();
+      animate(1);
+    }
+
+    function prev() {
+      if (animating || current <= 0) return;
+      animating = true;
+      current--;
+      imgNext.src = pages[current];
+      updateCounter();
+      animate(-1);
+    }
+
     document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowRight') flipTo(spread + 1);
-      if (e.key === 'ArrowLeft')  flipTo(spread - 1);
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
     });
 
-    showSpread(0);
+    imgCurrent.src = pages[current];
+    updateCounter();
   </script>
 </body>
 </html>
