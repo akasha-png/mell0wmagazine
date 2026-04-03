@@ -63,6 +63,14 @@
     .arrow-left { left: 20px; }
     .arrow-right { right: 20px; }
 
+    @media (max-width: 768px) {
+      .arrow { display: none; }
+      .slide img {
+        max-height: 95vh;
+        max-width: 95vw;
+      }
+    }
+
     .page-counter {
       position: fixed;
       bottom: 20px;
@@ -177,6 +185,23 @@
     document.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight') next();
       if (e.key === 'ArrowLeft') prev();
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) next();
+        else prev();
+      }
     });
 
     imgCurrent.src = pages[current];
