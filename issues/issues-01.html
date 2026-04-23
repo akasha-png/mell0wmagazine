@@ -128,6 +128,13 @@
     let current = 0;
     let animating = false;
 
+    // Preload all images
+    const preloaded = pages.map(src => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
+
     const slideCurrent = document.getElementById('slide-current');
     const slideNext = document.getElementById('slide-next');
     const imgCurrent = document.getElementById('img-current');
@@ -139,7 +146,6 @@
     }
 
     function animate(direction) {
-      // direction: 1 = forward (slide left), -1 = backward (slide right)
       const exitTo = direction === 1 ? '-100%' : '100%';
       const enterFrom = direction === 1 ? '100%' : '-100%';
 
@@ -164,22 +170,27 @@
       });
     }
 
-    function next() {
-      if (animating || current >= pages.length - 1) return;
+    function goTo(index, direction) {
       animating = true;
-      current++;
+      current = index;
       imgNext.src = pages[current];
       updateCounter();
-      animate(1);
+
+      if (preloaded[current].complete) {
+        animate(direction);
+      } else {
+        preloaded[current].onload = () => animate(direction);
+      }
+    }
+
+    function next() {
+      if (animating || current >= pages.length - 1) return;
+      goTo(current + 1, 1);
     }
 
     function prev() {
       if (animating || current <= 0) return;
-      animating = true;
-      current--;
-      imgNext.src = pages[current];
-      updateCounter();
-      animate(-1);
+      goTo(current - 1, -1);
     }
 
     document.addEventListener('keydown', e => {

@@ -19,24 +19,89 @@
       z-index: 100;
     }
     .back:hover { text-decoration: underline; }
+
+    .embeddable-buttondown-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      margin: 30px auto;
+      font-family: 'Golos Text', sans-serif;
+    }
+
+    .embeddable-buttondown-form label {
+      font-size: 18px;
+    }
+
+    .embeddable-buttondown-form input[type="email"] {
+      padding: 10px 15px;
+      font-size: 16px;
+      font-family: 'Golos Text', sans-serif;
+      border: 2px solid #0a0a0a;
+      width: 300px;
+      text-align: center;
+    }
+
+    .embeddable-buttondown-form input[type="submit"] {
+      padding: 10px 30px;
+      font-size: 16px;
+      font-family: 'Golos Text', sans-serif;
+      font-weight: bold;
+      background: #0a0a0a;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .embeddable-buttondown-form input[type="submit"]:hover {
+      background: #333;
+    }
+
+    .embeddable-buttondown-form p {
+      font-size: 12px;
+      color: #888;
+    }
+
+    .embeddable-buttondown-form p a {
+      color: #888;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <img src="Images/mellowlogo.png" width="800" style="display: block; margin: 0 auto;">
   <img src="Images/newsletter.png" width="250" style="display: block; margin: -50px auto 0;">
-  <p style="display: block; margin: 20px auto; width: 600px; font-family: 'Golos Text', sans-serif; font-size: 18px; line-height: 2; text-align: center;">
-    
+
+  <div style="border: 2px solid #0a0a0a; padding: 20px 30px 10px; margin: 20px auto 40px; width: 600px;">
+    <p style="font-family: 'Golos Text', sans-serif; font-size: 16px; text-align: center; margin: 0 0 10px 0;">Stay updated on the newest information about issues | drops | behind the scenes | and more!</p>
+
+    <form
+      action="https://buttondown.com/api/emails/embed-subscribe/amerie"
+      method="post"
+      class="embeddable-buttondown-form"
+    >
+      <label for="bd-email">Enter your email</label>
+      <input type="email" name="email" id="bd-email" />
+      <input type="submit" value="Subscribe" />
+      <p>
+        <a href="https://buttondown.com/refer/amerie" target="_blank">
+          Powered by Buttondown.
+        </a>
+      </p>
+    </form>
+  </div>
+
+  <p style="font-family: ‘Golos Text’, sans-serif; font-size: 20px; font-weight: bold; text-align: center; margin: 40px auto 0;">latest newsletter, 4.23.2026</p>
+
+  <p style="display: block; margin: 20px auto; width: 600px; font-family: ‘Golos Text’, sans-serif; font-size: 18px; line-height: 2; text-align: center;">
+
 It has been such a dream working on <b>issue.01. </b> I started this magazine really scared. I talked to people I was afraid of. Going to locations I’ve never been before. Ask my friends—they would know how much I worry about everything. But if I learned anything in life, whenever I’m really scared—it always pays off in the end. Stepping out of your comfort zone is the only way you grow.  So go out, and confront what you’re afraid of.<br>
 <img src="Images/chicagotrain.jpg" style="display: block; margin: 20px auto; max-width: 100%;">
 <b>Issue.02</b>
   </br>
-GOOD NEWS! <b>I have interviewed all the artists for issue.02. It will come out ALOT sooner.</b> I am aiming for late-may/june!!! I just need to finish this school year strong first :) I THINK I will include five artists, instead of the typical four artists per issue, but I’m not too sure yet! Super excited for what I have in store. I hope you guys enjoyed Issue.01! I'm looking to <b>print issue.01 very soon in April!</b> <br>
+GOOD NEWS! <b>I have interviewed all the artists for issue.02. It will come out ALOT sooner.</b> I am aiming for late-may/june!!! I just need to finish this school year strong first :) I THINK I will include five artists, instead of the typical four artists per issue, but I’m not too sure yet! Super excited for what I have in store. I hope you guys enjoyed Issue.01! I’m looking to <b>print issue.01 very soon in April!</b> <br>
 <img src="Images/bridge.jpg" style="display: block; margin: 20px auto; max-width: 100%;">
 Thank you so much for the support. I really appreciate the time you took out of your day to view my work. I hope you have a great day! </p>
-
-
-  </p>
   <a href="index.html" class="back">Back</a>
 </body>
 </html>
