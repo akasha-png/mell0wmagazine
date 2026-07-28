@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mellow #2</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #fff;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .carousel {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s ease;
+    }
+
+    .slide img {
+      max-height: 90vh;
+      max-width: 90vw;
+      width: auto;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      font-size: 2.5rem;
+      cursor: pointer;
+      color: #111;
+      padding: 10px 20px;
+      user-select: none;
+      z-index: 10;
+      opacity: 0.5;
+      transition: opacity 0.2s;
+    }
+
+    .arrow:hover { opacity: 1; }
+    .arrow-left { left: 20px; }
+    .arrow-right { right: 20px; }
+
+    @media (max-width: 768px) {
+      .arrow { display: none; }
+      .slide img {
+        max-height: 95vh;
+        max-width: 95vw;
+      }
+    }
+
+    .page-counter {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Golos Text', sans-serif;
+      font-size: 14px;
+      color: #555;
+    }
+
+    .back {
+      position: fixed;
+      bottom: 20px;
+      right: 30px;
+      font-family: 'Golos Text', sans-serif;
+      font-size: 14px;
+      color: #111;
+      text-decoration: none;
+    }
+
+    .back:hover { text-decoration: underline; }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <div class="carousel" id="carousel">
+    <div class="slide" id="slide-current"><img id="img-current" src="" alt=""></div>
+    <div class="slide" id="slide-next" style="transform: translateX(100%)"><img id="img-next" src="" alt=""></div>
+  </div>
+
+  <button class="arrow arrow-left" onclick="prev()">&#8592;</button>
+  <button class="arrow arrow-right" onclick="next()">&#8594;</button>
+  <div class="page-counter" id="counter"></div>
+  <a href="../index.html" class="back">Back</a>
+
+  <script>
+    const pages = [
+      '../Images/magazine2demo/issue2final.jpg',
+      '../Images/magazine2demo/issue2final2.jpg',
+      '../Images/magazine2demo/issue2final3.jpg',
+      '../Images/magazine2demo/issue2final4.jpg',
+      '../Images/magazine2demo/issue2final5.jpg',
+      '../Images/magazine2demo/issue2final6.jpg',
+      '../Images/magazine2demo/issue2final7.jpg',
+      '../Images/magazine2demo/issue2final8.jpg',
+      '../Images/magazine2demo/issue2final9.jpg',
+      '../Images/magazine2demo/issue2final10.jpg',
+      '../Images/magazine2demo/issue2final11.jpg',
+      '../Images/magazine2demo/issue2final12.jpg',
+      '../Images/magazine2demo/issue2final13.jpg',
+      '../Images/magazine2demo/issue2final14.jpg',
+      '../Images/magazine2demo/issue2final15.jpg',
+      '../Images/magazine2demo/issue2final16.jpg',
+    ];
+
+    let current = 0;
+    let animating = false;
+
+    // Preload all images
+    const preloaded = pages.map(src => {
+      const img = new Image();
+      img.src = src;
+      return img;
+    });
+
+    const slideCurrent = document.getElementById('slide-current');
+    const slideNext = document.getElementById('slide-next');
+    const imgCurrent = document.getElementById('img-current');
+    const imgNext = document.getElementById('img-next');
+    const counter = document.getElementById('counter');
+
+    function updateCounter() {
+      counter.textContent = `${current + 1} / ${pages.length}`;
+    }
+
+    function animate(direction) {
+      const exitTo = direction === 1 ? '-100%' : '100%';
+      const enterFrom = direction === 1 ? '100%' : '-100%';
+
+      slideNext.style.transition = 'none';
+      slideNext.style.transform = `translateX(${enterFrom})`;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          slideCurrent.style.transition = 'transform 0.4s ease';
+          slideNext.style.transition = 'transform 0.4s ease';
+          slideCurrent.style.transform = `translateX(${exitTo})`;
+          slideNext.style.transform = 'translateX(0)';
+        });
+      });
+
+      slideNext.addEventListener('transitionend', function onDone() {
+        slideNext.removeEventListener('transitionend', onDone);
+        imgCurrent.src = pages[current];
+        slideCurrent.style.transition = 'none';
+        slideCurrent.style.transform = 'translateX(0)';
+        animating = false;
+      });
+    }
+
+    function goTo(index, direction) {
+      animating = true;
+      current = index;
+      imgNext.src = pages[current];
+      updateCounter();
+
+      if (preloaded[current].complete) {
+        animate(direction);
+      } else {
+        preloaded[current].onload = () => animate(direction);
+      }
+    }
+
+    function next() {
+      if (animating || current >= pages.length - 1) return;
+      goTo(current + 1, 1);
+    }
+
+    function prev() {
+      if (animating || current <= 0) return;
+      goTo(current - 1, -1);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') next();
+      if (e.key === 'ArrowLeft') prev();
+    });
+
+    // Touch swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+
+    document.addEventListener('touchstart', e => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    document.addEventListener('touchend', e => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) next();
+        else prev();
+      }
+    });
+
+    if (pages.length > 0) {
+      imgCurrent.src = pages[0];
+    }
+    updateCounter();
+  </script>
+</body>
+</html>

@@ -50,28 +50,20 @@
 
     .zine-overlay {
       position: absolute;
-      top: 44%;
-      left: calc(50% + 0.6vw);
+      top: 43%;
+      left: calc(40% + 0.6vw);
       transform: translateX(5%);
-      width: 33vw;
-      height: auto;
-      transition: transform 0.2s ease, scale 0.2s ease;
+      font-family: 'Golos Text', sans-serif;
+      font-size: 6vw;
+      font-weight: bold;
+      color: white;
+      text-decoration: none;
       cursor: pointer;
+      transition: transform 0.2s ease;
     }
 
     .zine-overlay:hover {
-      transform: translateX(5%);
       border-bottom: 5px solid rgb(255, 255, 255);
-    }
-
-    .releasedate-overlay {
-      position: absolute;
-      top: 57%;
-      left: calc(50% + 0.6vw);
-      transform: translateX(30%);
-      font-family: 'Golos Text', sans-serif;
-      font-size: 1.5vw;
-      color: white;
     }
 
     .page2-wrapper {
@@ -144,8 +136,7 @@
   <div class="page1-wrapper">
     <img class="fullscreen" src="Images/page1.jpg" alt="">
     <img class="logo-overlay" src="Images/mellowlogo2.png" alt="Mellow Logo">
-    <a href="issues/issues-01.html"><img class="zine-overlay" src="Images/issue.1.png" alt="Zine 1"></a>
-    <p class="releasedate-overlay">issue.2 releases summer 2026</p>
+    <a href="issues/issues-02.html" class="zine-overlay">issue 2 out now</a>
   </div>
   <div class="page2-wrapper" id="selections">
     <img class="fullscreen" src="Images/Page2.JPG" alt="">
